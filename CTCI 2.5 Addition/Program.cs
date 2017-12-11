@@ -11,33 +11,86 @@ namespace CTCI_2._5_Addition
         static void Main(string[] args)
         {
             PrintHeaderMsg(2, 3, "Addition via Nodes");
-            
-            Node head1 = CreateSinglyLinkedList(100);
-            Node head2 = CreateSinglyLinkedList(100);
+
+            Node head1 = CreateSinglyLinkedList(5);
+            Node head2 = CreateSinglyLinkedList(10);
             Node answer = null;
-
-
+            EvenListLength(head1, head2);
             PrintNodes(head1);
-                Console.WriteLine("+");
-            PrintNodes(head2);            
-                Console.WriteLine();
-                Console.WriteLine("Recursive Algorithm:");
-                Console.WriteLine();
+            Console.WriteLine("+");
+            PrintNodes(head2);
+            Console.WriteLine();
+            Console.WriteLine("Recursive Algorithm:");
+            Console.WriteLine();
             PrintNodes_ReverseNum(head1);
-                Console.WriteLine();
-                Console.WriteLine("+");
+            Console.WriteLine();
+            Console.WriteLine("+");
             PrintNodes_ReverseNum(head2);
-                Console.WriteLine();
-                Console.WriteLine("--------------");       
+            Console.WriteLine();
+            Console.WriteLine("--------------");
+            
+            AddLists_LongHand_Recursive(head1, head2, ref answer);
 
-            AddLists_LongHand_Recursive(head1, head2, ref answer);     
             PrintNodes_ReverseNum(answer);
-                Console.WriteLine();
+            Console.WriteLine();
 
             Console.ReadLine();
         }
 
+        /// <summary>
+        /// 
+        /// This method adds leading zeros to the shorter list
+        /// to give both lists the same number of nodes
+        /// 
+        /// </summary>
+        /// <param name="head1"></param>
+        /// <param name="head2"></param>
+        private static void EvenListLength(Node head1, Node head2)
+        {
 
+            int length1 = GetListLength(head1);
+            int length2 = GetListLength(head2);
+
+            if (length1 > length2)
+            {
+                for (int i = 0; i < (length1 - length2); ++i)
+                {
+                    AddTrailingZero(head2);
+                }
+            }
+
+            if (length2 > length1)
+            {
+                for (int i = 0; i < (length2 - length1); ++i)
+                {
+                    AddTrailingZero(head1);
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// 
+        /// 1. adds the passed numbers and passed remainder
+        /// 2. records the answer as a new node in the answer list
+        /// 2. calls itself, passing the next 2 numbers in the list, and the new remainder
+        /// 3. repeats 1-3 until both nodes are null (end of list)
+        /// 4. if there's a remainder, it's added to the answer list
+        /// 
+        /// Complexity:     Runs in O(N) time
+        ///                 Every node is touched once
+        ///                 
+        ///                 Requires O(N) memory
+        ///                 The answer is built in a new linked list, which
+        ///                 is approximately as large as the largest input list.
+        ///                 As input grows, memory requirement grows.
+        /// 
+        /// </summary>
+        /// <param name="node1"></param>
+        /// <param name="node2"></param>
+        /// <param name="answer"></param>
+        /// <param name="remainder"></param>
+        /// <returns></returns>
         private static int AddLists_LongHand_Recursive(Node node1, Node node2, ref Node answer, int remainder = 0)
         {
             // both lists exhausted, begin unspooling the stack
@@ -94,82 +147,48 @@ namespace CTCI_2._5_Addition
             return remainder;
         }
 
-
-        private static void AddLists_LongHand(Node head1, Node head2)
+        /// <summary>
+        /// Utility function to add zeroes at beginning of list
+        /// </summary>
+        /// <param name="node1"></param>
+        private static void AddLeadingZero(ref Node node1)
         {
-            Node runner1 = head1;
-            Node runner2 = head2;
-            Node answer = null;
-
-            int remainder = 0;
-
-            while ((runner1 != null) && (runner2 != null))
-            {
-                // get the lowest digit from both lists
-                // NOTE: numbers are reverse-sorted (1s are last)
-
-                while ((runner1.next != null) && (runner2.next != null))
-                {
-                    runner1 = runner1.next;
-                    runner2 = runner2.next;
-                }
-
-                remainder = (runner1.Data + runner2.Data) % 10;
-
-                AddNode(ref answer, (runner1.Data + runner2.Data - (remainder * 10))  );
-
-                
-
-                runner1 = head1;
-                runner2 = head2;
-            }
-
-
-
-
-
-
+            Node temp = new Node(0);
+            temp.next = node1;
+            node1 = temp;
         }
-
-        private static void AddLists(Node head1, Node head2)
+        
+        /// <summary>
+        /// Utility function to add zeroes at end of list        
+        /// </summary>
+        /// <param name="head1"></param>
+        private static void AddTrailingZero(Node head1)
         {
-            // numbers are stored reverse-order (tail is 1s digit)
-            // each node is a single digit
-
-            string str_num1 = "";
             Node runner = head1;
-            while (runner != null)
-            {
-                str_num1 += runner.Data;
+
+            while (runner.next != null)
                 runner = runner.next;
-            }
-            char[] charArray = str_num1.ToArray();
-            Array.Reverse(charArray);
-            str_num1 = new string(charArray);
-            
-            string str_num2 = "";
-            runner = head2;
-            while (runner != null)
-            {
-                str_num2 += runner.Data;
-                runner = runner.next;
-            }
-            charArray = str_num2.ToArray();
-            Array.Reverse(charArray);
-            str_num2 = new string(charArray);
 
-            ulong num1 = ulong.Parse(str_num1);
-            ulong num2 = ulong.Parse(str_num2);
+            runner.next = new Node(0);
 
-            ulong num3 = num1 + num2;
-
-            Console.WriteLine(num1);
-            Console.WriteLine("+");
-            Console.WriteLine(num2);
-            Console.WriteLine("------------------");
-            Console.WriteLine(num3);
-            
         }
+
+        private static int GetListLength(Node node1)
+        {
+            if (node1 == null)
+                return 0;
+
+            int counter = 1;
+
+            while (node1.next != null)
+            {
+                ++counter;
+                node1 = node1.next;
+            }
+
+            return counter;
+        }
+        
 
         private static Node CreateSinglyLinkedList(int count)
         {
