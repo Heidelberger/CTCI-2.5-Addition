@@ -37,37 +37,6 @@ namespace CTCI_2._5_Addition
             Console.ReadLine();
         }
 
-        /// <summary>
-        /// 
-        /// This method adds leading zeros to the shorter list
-        /// to give both lists the same number of nodes
-        /// 
-        /// </summary>
-        /// <param name="head1"></param>
-        /// <param name="head2"></param>
-        private static void EvenListLength(Node head1, Node head2)
-        {
-
-            int length1 = GetListLength(head1);
-            int length2 = GetListLength(head2);
-
-            if (length1 > length2)
-            {
-                for (int i = 0; i < (length1 - length2); ++i)
-                {
-                    AddTrailingZero(head2);
-                }
-            }
-
-            if (length2 > length1)
-            {
-                for (int i = 0; i < (length2 - length1); ++i)
-                {
-                    AddTrailingZero(head1);
-                }
-            }
-        }
-
 
         /// <summary>
         /// 
@@ -148,9 +117,36 @@ namespace CTCI_2._5_Addition
         }
 
         /// <summary>
-        /// Utility function to add zeroes at beginning of list
+        /// 
+        /// This method adds leading zeros to the shorter list
+        /// to give both lists the same number of nodes
+        /// 
         /// </summary>
-        /// <param name="node1"></param>
+        /// <param name="head1"></param>
+        /// <param name="head2"></param>
+        private static void EvenListLength(Node head1, Node head2)
+        {
+
+            int length1 = GetListLength(head1);
+            int length2 = GetListLength(head2);
+
+            if (length1 > length2)
+            {
+                for (int i = 0; i < (length1 - length2); ++i)
+                {
+                    AddTrailingZero(head2);
+                }
+            }
+
+            if (length2 > length1)
+            {
+                for (int i = 0; i < (length2 - length1); ++i)
+                {
+                    AddTrailingZero(head1);
+                }
+            }
+        }
+        
         private static void AddLeadingZero(ref Node node1)
         {
             Node temp = new Node(0);
@@ -158,10 +154,6 @@ namespace CTCI_2._5_Addition
             node1 = temp;
         }
         
-        /// <summary>
-        /// Utility function to add zeroes at end of list        
-        /// </summary>
-        /// <param name="head1"></param>
         private static void AddTrailingZero(Node head1)
         {
             Node runner = head1;
@@ -170,7 +162,6 @@ namespace CTCI_2._5_Addition
                 runner = runner.next;
 
             runner.next = new Node(0);
-
         }
 
         private static int GetListLength(Node node1)
@@ -187,8 +178,7 @@ namespace CTCI_2._5_Addition
             }
 
             return counter;
-        }
-        
+        }        
 
         private static Node CreateSinglyLinkedList(int count)
         {
@@ -230,7 +220,6 @@ namespace CTCI_2._5_Addition
 
             Console.Write(passed_node.Data);            
         }
-
 
         private static void AddNode(ref Node passed_head, int value)
         {
